@@ -1,15 +1,23 @@
 import numpy as np
-def game_core_v2(number):
+def game_core_v3(number):
     '''Сначала устанавливаем любое random число, а потом уменьшаем или увеличиваем его в зависимости от того, больше оно или меньше нужного.
        Функция принимает загаданное число и возвращает число попыток'''
     count = 1
+    lower_border = 1
+    upper_border = 100
     predict = np.random.randint(1,101)
+
+    def generate_predict(lower_border,upper_border):
+        '''Генерируем новый вариант числа как среднее в измененных границах с учетом предыдущей попытки угадывания'''
+        return lower_border + (upper_border-lower_border) // 2
+
     while number != predict:
         count+=1
-        if number > predict: 
-            predict += 1
-        elif number < predict: 
-            predict -= 1
+        if number > predict:
+            lower_border = predict + 1 
+        elif number < predict:
+            upper_border = predict - 1 
+        predict = generate_predict(lower_border,upper_border)
     return(count) # выход из цикла, если угадали
 
 def score_game(game_core):
@@ -23,4 +31,4 @@ def score_game(game_core):
     print(f"Ваш алгоритм угадывает число в среднем за {score} попыток")
     return(score)
 
-score_game(game_core_v2)
+score_game(game_core_v3)
